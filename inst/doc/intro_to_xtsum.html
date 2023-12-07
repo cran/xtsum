@@ -1,0 +1,1922 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Joao Claudio Macosso" />
+
+<meta name="date" content="2023-12-07" />
+
+<title>introduction to xtsum</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+<script>$(document).ready(function(){
+    if (typeof $('[data-toggle="tooltip"]').tooltip === 'function') {
+        $('[data-toggle="tooltip"]').tooltip();
+    }
+    if ($('[data-toggle="popover"]').popover === 'function') {
+        $('[data-toggle="popover"]').popover();
+    }
+});
+</script>
+<style type="text/css">
+.lightable-minimal {
+border-collapse: separate;
+border-spacing: 16px 1px;
+width: 100%;
+margin-bottom: 10px;
+}
+.lightable-minimal td {
+margin-left: 5px;
+margin-right: 5px;
+}
+.lightable-minimal th {
+margin-left: 5px;
+margin-right: 5px;
+}
+.lightable-minimal thead tr:last-child th {
+border-bottom: 2px solid #00000050;
+empty-cells: hide;
+}
+.lightable-minimal tbody tr:first-child td {
+padding-top: 0.5em;
+}
+.lightable-minimal.lightable-hover tbody tr:hover {
+background-color: #f5f5f5;
+}
+.lightable-minimal.lightable-striped tbody tr:nth-child(even) {
+background-color: #f5f5f5;
+}
+.lightable-classic {
+border-top: 0.16em solid #111111;
+border-bottom: 0.16em solid #111111;
+width: 100%;
+margin-bottom: 10px;
+margin: 10px 5px;
+}
+.lightable-classic tfoot tr td {
+border: 0;
+}
+.lightable-classic tfoot tr:first-child td {
+border-top: 0.14em solid #111111;
+}
+.lightable-classic caption {
+color: #222222;
+}
+.lightable-classic td {
+padding-left: 5px;
+padding-right: 5px;
+color: #222222;
+}
+.lightable-classic th {
+padding-left: 5px;
+padding-right: 5px;
+font-weight: normal;
+color: #222222;
+}
+.lightable-classic thead tr:last-child th {
+border-bottom: 0.10em solid #111111;
+}
+.lightable-classic.lightable-hover tbody tr:hover {
+background-color: #F9EEC1;
+}
+.lightable-classic.lightable-striped tbody tr:nth-child(even) {
+background-color: #f5f5f5;
+}
+.lightable-classic-2 {
+border-top: 3px double #111111;
+border-bottom: 3px double #111111;
+width: 100%;
+margin-bottom: 10px;
+}
+.lightable-classic-2 tfoot tr td {
+border: 0;
+}
+.lightable-classic-2 tfoot tr:first-child td {
+border-top: 3px double #111111;
+}
+.lightable-classic-2 caption {
+color: #222222;
+}
+.lightable-classic-2 td {
+padding-left: 5px;
+padding-right: 5px;
+color: #222222;
+}
+.lightable-classic-2 th {
+padding-left: 5px;
+padding-right: 5px;
+font-weight: normal;
+color: #222222;
+}
+.lightable-classic-2 tbody tr:last-child td {
+border-bottom: 3px double #111111;
+}
+.lightable-classic-2 thead tr:last-child th {
+border-bottom: 1px solid #111111;
+}
+.lightable-classic-2.lightable-hover tbody tr:hover {
+background-color: #F9EEC1;
+}
+.lightable-classic-2.lightable-striped tbody tr:nth-child(even) {
+background-color: #f5f5f5;
+}
+.lightable-material {
+min-width: 100%;
+white-space: nowrap;
+table-layout: fixed;
+font-family: Roboto, sans-serif;
+border: 1px solid #EEE;
+border-collapse: collapse;
+margin-bottom: 10px;
+}
+.lightable-material tfoot tr td {
+border: 0;
+}
+.lightable-material tfoot tr:first-child td {
+border-top: 1px solid #EEE;
+}
+.lightable-material th {
+height: 56px;
+padding-left: 16px;
+padding-right: 16px;
+}
+.lightable-material td {
+height: 52px;
+padding-left: 16px;
+padding-right: 16px;
+border-top: 1px solid #eeeeee;
+}
+.lightable-material.lightable-hover tbody tr:hover {
+background-color: #f5f5f5;
+}
+.lightable-material.lightable-striped tbody tr:nth-child(even) {
+background-color: #f5f5f5;
+}
+.lightable-material.lightable-striped tbody td {
+border: 0;
+}
+.lightable-material.lightable-striped thead tr:last-child th {
+border-bottom: 1px solid #ddd;
+}
+.lightable-material-dark {
+min-width: 100%;
+white-space: nowrap;
+table-layout: fixed;
+font-family: Roboto, sans-serif;
+border: 1px solid #FFFFFF12;
+border-collapse: collapse;
+margin-bottom: 10px;
+background-color: #363640;
+}
+.lightable-material-dark tfoot tr td {
+border: 0;
+}
+.lightable-material-dark tfoot tr:first-child td {
+border-top: 1px solid #FFFFFF12;
+}
+.lightable-material-dark th {
+height: 56px;
+padding-left: 16px;
+padding-right: 16px;
+color: #FFFFFF60;
+}
+.lightable-material-dark td {
+height: 52px;
+padding-left: 16px;
+padding-right: 16px;
+color: #FFFFFF;
+border-top: 1px solid #FFFFFF12;
+}
+.lightable-material-dark.lightable-hover tbody tr:hover {
+background-color: #FFFFFF12;
+}
+.lightable-material-dark.lightable-striped tbody tr:nth-child(even) {
+background-color: #FFFFFF12;
+}
+.lightable-material-dark.lightable-striped tbody td {
+border: 0;
+}
+.lightable-material-dark.lightable-striped thead tr:last-child th {
+border-bottom: 1px solid #FFFFFF12;
+}
+.lightable-paper {
+width: 100%;
+margin-bottom: 10px;
+color: #444;
+}
+.lightable-paper tfoot tr td {
+border: 0;
+}
+.lightable-paper tfoot tr:first-child td {
+border-top: 1px solid #00000020;
+}
+.lightable-paper thead tr:last-child th {
+color: #666;
+vertical-align: bottom;
+border-bottom: 1px solid #00000020;
+line-height: 1.15em;
+padding: 10px 5px;
+}
+.lightable-paper td {
+vertical-align: middle;
+border-bottom: 1px solid #00000010;
+line-height: 1.15em;
+padding: 7px 5px;
+}
+.lightable-paper.lightable-hover tbody tr:hover {
+background-color: #F9EEC1;
+}
+.lightable-paper.lightable-striped tbody tr:nth-child(even) {
+background-color: #00000008;
+}
+.lightable-paper.lightable-striped tbody td {
+border: 0;
+}
+</style>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">
+
+div.csl-bib-body { }
+div.csl-entry {
+clear: both;
+margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+margin-left:2em;
+text-indent:-2em;
+}
+div.csl-left-margin {
+min-width:2em;
+float:left;
+}
+div.csl-right-inline {
+margin-left:2em;
+padding-left:1em;
+}
+div.csl-indent {
+margin-left: 2em;
+}
+</style>
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">introduction to xtsum</h1>
+<h4 class="author">Joao Claudio Macosso</h4>
+<h4 class="date">2023-12-07</h4>
+
+
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p><code>xtsum</code> is an R wrapper based on <code>STATA</code>
+<code>xtsum</code> command, it used to provide summary statistics for a
+panel data set. It decomposes the variable <span class="math inline">\(x_{it}\)</span> into a between <span class="math inline">\((\bar{x_i})\)</span> and within <span class="math inline">\((x_{it} − \bar{x_i} + \bar{\bar{x}})\)</span>, the
+global mean x being added back in make results comparable, see <span class="citation">(StataCorp 2023)</span>.</p>
+</div>
+<div id="installation" class="section level1">
+<h1>Installation</h1>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;xtsum&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="co"># For dev version</span></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="co"># install.packages(&quot;devtools&quot;)</span></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;macosso/xtsum&quot;</span>)</span></code></pre></div>
+</div>
+<div id="getting-started" class="section level1">
+<h1>Getting Started</h1>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># Load the librarry</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">library</span>(xtsum)</span></code></pre></div>
+<div id="xtsum" class="section level2">
+<h2>xtsum</h2>
+<p>This function computes summary statistics for panel data, including
+overall statistics, between-group statistics, and within-group
+statistics.</p>
+<p><strong>Usage</strong></p>
+<pre><code>xtsum(
+  data,
+  variables = NULL,
+  id = NULL,
+  t = NULL,
+  na.rm = FALSE,
+  return.data.frame = TRUE,
+  dec = 3
+)</code></pre>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><p><code>data</code> A data.frame or pdata.frame object representing
+panel data.</p></li>
+<li><p><code>variables</code> (Optional) Vector of variable names for
+which to calculate statistics. If not provided, all numeric variables in
+the data will be used.</p></li>
+<li><p><code>id</code> (Optional) Name of the individual identifier
+variable.</p></li>
+<li><p><code>t</code> (Optional) Name of the time identifier
+variable.</p></li>
+<li><p><code>na.rm</code> Logical indicating whether to remove NAs when
+calculating statistics.</p></li>
+<li><p><code>return.data.frame</code> If the return object should be a
+dataframe</p></li>
+<li><p><code>dec</code> Number of significant digits to report</p></li>
+</ul>
+<div id="example" class="section level3">
+<h3>Example</h3>
+<div id="genral-example" class="section level4">
+<h4>Genral example</h4>
+<p>Based on National Longitudinal Survey of Young Women, 14-24 years old
+in 1968</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;nlswork&quot;</span>, <span class="at">package =</span> <span class="st">&quot;sampleSelection&quot;</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">xtsum</span>(nlswork, <span class="st">&quot;hours&quot;</span>, <span class="at">id =</span> <span class="st">&quot;idcode&quot;</span>, <span class="at">t =</span> <span class="st">&quot;year&quot;</span>, <span class="at">na.rm =</span> T, <span class="at">dec =</span> <span class="dv">6</span>)</span></code></pre></div>
+<table class=" lightable-classic" style="font-family: &quot;Arial Narrow&quot;, &quot;Source Sans Pro&quot;, sans-serif; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Variable
+</th>
+<th style="text-align:left;">
+Dim
+</th>
+<th style="text-align:left;">
+Mean
+</th>
+<th style="text-align:left;">
+SD
+</th>
+<th style="text-align:left;">
+Min
+</th>
+<th style="text-align:left;">
+Max
+</th>
+<th style="text-align:left;">
+Observations
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+___________
+</td>
+<td style="text-align:left;">
+_________
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+hours
+</td>
+<td style="text-align:left;">
+overall
+</td>
+<td style="text-align:left;">
+36.55956
+</td>
+<td style="text-align:left;">
+9.869623
+</td>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:left;">
+168
+</td>
+<td style="text-align:left;">
+N = 28467
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+between
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+7.846585
+</td>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:left;">
+83.5
+</td>
+<td style="text-align:left;">
+n = 4710
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+within
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+7.520712
+</td>
+<td style="text-align:left;">
+-2.154726
+</td>
+<td style="text-align:left;">
+130.05956
+</td>
+<td style="text-align:left;">
+T = 6.043949
+</td>
+</tr>
+</tbody>
+</table>
+<p>The table above can be interpreted as below paraphrased from <span class="citation">(StataCorp 2023)</span>.</p>
+<p>The overall and within are calculated over <code>N = 28,467</code>
+person-years of data. The between is calculated over
+<code>n = 4,710</code> persons, and the average number of years a person
+was observed in the hours data is<code>T = 6</code>.</p>
+<p><code>xtsum</code> also reports standard deviation(<code>SD</code>),
+minimums(<code>Min</code>), and maximums(<code>Max</code>).</p>
+<p>Hours worked varied between <code>Overal Min = 1</code> and
+<code>Overall Max = 168</code>. Average hours worked for each woman
+varied between <code>between Min = 1</code> and
+<code>between Max = 83.5</code>. “Hours worked within” varied between
+<code>within Min = −2.15</code> and <code>within Max = 130.1</code>,
+which is not to say that any woman actually worked negative hours. The
+within number refers to the deviation from each individual’s average,
+and naturally, some of those deviations must be negative. Then the
+negative value is not disturbing but the positive value is. Did some
+woman really deviate from her average by +130.1 hours? No. In our
+definition of within, we add back in the global average of 36.6 hours.
+Some woman did deviate from her average by 130.1 − 36.6 = 93.5 hours,
+which is still large.</p>
+<p>The reported standard deviations tell us that the variation in hours
+worked last week across women is nearly equal to that observed within a
+woman over time. That is, if you were to draw two women randomly from
+our data, the difference in hours worked is expected to be nearly equal
+to the difference for the same woman in two randomly selected years.</p>
+<p>More detailed interpretation can be found in handout<span class="citation">(Porter n.d.)</span></p>
+</div>
+<div id="using-pdata.frame-object" class="section level4">
+<h4>Using pdata.frame object</h4>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;Gasoline&quot;</span>, <span class="at">package =</span> <span class="st">&quot;plm&quot;</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>Gas <span class="ot">&lt;-</span> <span class="fu">pdata.frame</span>(Gasoline, <span class="at">index =</span> <span class="fu">c</span>(<span class="st">&quot;country&quot;</span>, <span class="st">&quot;year&quot;</span>), <span class="at">drop.index =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="fu">xtsum</span>(Gas)</span></code></pre></div>
+<table class=" lightable-classic" style="font-family: &quot;Arial Narrow&quot;, &quot;Source Sans Pro&quot;, sans-serif; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Variable
+</th>
+<th style="text-align:left;">
+Dim
+</th>
+<th style="text-align:left;">
+Mean
+</th>
+<th style="text-align:left;">
+SD
+</th>
+<th style="text-align:left;">
+Min
+</th>
+<th style="text-align:left;">
+Max
+</th>
+<th style="text-align:left;">
+Observations
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+___________
+</td>
+<td style="text-align:left;">
+_________
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+lgaspcar
+</td>
+<td style="text-align:left;">
+overall
+</td>
+<td style="text-align:left;">
+4.296
+</td>
+<td style="text-align:left;">
+0.549
+</td>
+<td style="text-align:left;">
+3.38
+</td>
+<td style="text-align:left;">
+6.157
+</td>
+<td style="text-align:left;">
+N = 342
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+between
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+0.515
+</td>
+<td style="text-align:left;">
+3.73
+</td>
+<td style="text-align:left;">
+5.766
+</td>
+<td style="text-align:left;">
+n = 18
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+within
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+0.224
+</td>
+<td style="text-align:left;">
+3.545
+</td>
+<td style="text-align:left;">
+5.592
+</td>
+<td style="text-align:left;">
+T = 19
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+___________
+</td>
+<td style="text-align:left;">
+_________
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+lincomep
+</td>
+<td style="text-align:left;">
+overall
+</td>
+<td style="text-align:left;">
+-6.139
+</td>
+<td style="text-align:left;">
+0.635
+</td>
+<td style="text-align:left;">
+-8.073
+</td>
+<td style="text-align:left;">
+-5.221
+</td>
+<td style="text-align:left;">
+N = 342
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+between
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+0.609
+</td>
+<td style="text-align:left;">
+-7.816
+</td>
+<td style="text-align:left;">
+-5.449
+</td>
+<td style="text-align:left;">
+n = 18
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+within
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+0.225
+</td>
+<td style="text-align:left;">
+-6.877
+</td>
+<td style="text-align:left;">
+-5.6
+</td>
+<td style="text-align:left;">
+T = 19
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+___________
+</td>
+<td style="text-align:left;">
+_________
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+lrpmg
+</td>
+<td style="text-align:left;">
+overall
+</td>
+<td style="text-align:left;">
+-0.523
+</td>
+<td style="text-align:left;">
+0.678
+</td>
+<td style="text-align:left;">
+-2.896
+</td>
+<td style="text-align:left;">
+1.125
+</td>
+<td style="text-align:left;">
+N = 342
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+between
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+0.684
+</td>
+<td style="text-align:left;">
+-2.709
+</td>
+<td style="text-align:left;">
+0.739
+</td>
+<td style="text-align:left;">
+n = 18
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+within
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+0.127
+</td>
+<td style="text-align:left;">
+-1.057
+</td>
+<td style="text-align:left;">
+-0.137
+</td>
+<td style="text-align:left;">
+T = 19
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+___________
+</td>
+<td style="text-align:left;">
+_________
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+lcarpcap
+</td>
+<td style="text-align:left;">
+overall
+</td>
+<td style="text-align:left;">
+-9.042
+</td>
+<td style="text-align:left;">
+1.219
+</td>
+<td style="text-align:left;">
+-13.475
+</td>
+<td style="text-align:left;">
+-7.536
+</td>
+<td style="text-align:left;">
+N = 342
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+between
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+1.114
+</td>
+<td style="text-align:left;">
+-12.459
+</td>
+<td style="text-align:left;">
+-7.781
+</td>
+<td style="text-align:left;">
+n = 18
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+within
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+0.557
+</td>
+<td style="text-align:left;">
+-11.332
+</td>
+<td style="text-align:left;">
+-7.691
+</td>
+<td style="text-align:left;">
+T = 19
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="using-regular-data.frame-with-id-and-t-specified" class="section level4">
+<h4>Using regular data.frame with id and t specified</h4>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;Crime&quot;</span>, <span class="at">package =</span> <span class="st">&quot;plm&quot;</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="fu">xtsum</span>(Crime, <span class="at">variables =</span> <span class="fu">c</span>(<span class="st">&quot;polpc&quot;</span>, <span class="st">&quot;avgsen&quot;</span>, <span class="st">&quot;crmrte&quot;</span>), <span class="at">id =</span> <span class="st">&quot;county&quot;</span>, <span class="at">t =</span> <span class="st">&quot;year&quot;</span>)</span></code></pre></div>
+<table class=" lightable-classic" style="font-family: &quot;Arial Narrow&quot;, &quot;Source Sans Pro&quot;, sans-serif; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Variable
+</th>
+<th style="text-align:left;">
+Dim
+</th>
+<th style="text-align:left;">
+Mean
+</th>
+<th style="text-align:left;">
+SD
+</th>
+<th style="text-align:left;">
+Min
+</th>
+<th style="text-align:left;">
+Max
+</th>
+<th style="text-align:left;">
+Observations
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+___________
+</td>
+<td style="text-align:left;">
+_________
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+polpc
+</td>
+<td style="text-align:left;">
+overall
+</td>
+<td style="text-align:left;">
+0.002
+</td>
+<td style="text-align:left;">
+0.003
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.036
+</td>
+<td style="text-align:left;">
+N = 630
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+between
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+0.002
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+<td style="text-align:left;">
+0.016
+</td>
+<td style="text-align:left;">
+n = 90
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+within
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+0.002
+</td>
+<td style="text-align:left;">
+-0.013
+</td>
+<td style="text-align:left;">
+0.022
+</td>
+<td style="text-align:left;">
+T = 7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+___________
+</td>
+<td style="text-align:left;">
+_________
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+avgsen
+</td>
+<td style="text-align:left;">
+overall
+</td>
+<td style="text-align:left;">
+8.955
+</td>
+<td style="text-align:left;">
+2.658
+</td>
+<td style="text-align:left;">
+4.22
+</td>
+<td style="text-align:left;">
+25.83
+</td>
+<td style="text-align:left;">
+N = 630
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+between
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+1.498
+</td>
+<td style="text-align:left;">
+6.277
+</td>
+<td style="text-align:left;">
+14.581
+</td>
+<td style="text-align:left;">
+n = 90
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+within
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+2.201
+</td>
+<td style="text-align:left;">
+1.313
+</td>
+<td style="text-align:left;">
+20.203
+</td>
+<td style="text-align:left;">
+T = 7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+___________
+</td>
+<td style="text-align:left;">
+_________
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+crmrte
+</td>
+<td style="text-align:left;">
+overall
+</td>
+<td style="text-align:left;">
+0.032
+</td>
+<td style="text-align:left;">
+0.018
+</td>
+<td style="text-align:left;">
+0.002
+</td>
+<td style="text-align:left;">
+0.164
+</td>
+<td style="text-align:left;">
+N = 630
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+between
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+0.017
+</td>
+<td style="text-align:left;">
+0.004
+</td>
+<td style="text-align:left;">
+0.089
+</td>
+<td style="text-align:left;">
+n = 90
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+within
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+0.007
+</td>
+<td style="text-align:left;">
+-0.011
+</td>
+<td style="text-align:left;">
+0.126
+</td>
+<td style="text-align:left;">
+T = 7
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="specifying-variables-to-include-in-the-summary" class="section level4">
+<h4>Specifying variables to include in the summary</h4>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">xtsum</span>(Gas, <span class="at">variables =</span> <span class="fu">c</span>(<span class="st">&quot;lincomep&quot;</span>, <span class="st">&quot;lgaspcar&quot;</span>))</span></code></pre></div>
+<table class=" lightable-classic" style="font-family: &quot;Arial Narrow&quot;, &quot;Source Sans Pro&quot;, sans-serif; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Variable
+</th>
+<th style="text-align:left;">
+Dim
+</th>
+<th style="text-align:left;">
+Mean
+</th>
+<th style="text-align:left;">
+SD
+</th>
+<th style="text-align:left;">
+Min
+</th>
+<th style="text-align:left;">
+Max
+</th>
+<th style="text-align:left;">
+Observations
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+___________
+</td>
+<td style="text-align:left;">
+_________
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+lincomep
+</td>
+<td style="text-align:left;">
+overall
+</td>
+<td style="text-align:left;">
+-6.139
+</td>
+<td style="text-align:left;">
+0.635
+</td>
+<td style="text-align:left;">
+-8.073
+</td>
+<td style="text-align:left;">
+-5.221
+</td>
+<td style="text-align:left;">
+N = 342
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+between
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+0.609
+</td>
+<td style="text-align:left;">
+-7.816
+</td>
+<td style="text-align:left;">
+-5.449
+</td>
+<td style="text-align:left;">
+n = 18
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+within
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+0.225
+</td>
+<td style="text-align:left;">
+-6.877
+</td>
+<td style="text-align:left;">
+-5.6
+</td>
+<td style="text-align:left;">
+T = 19
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+___________
+</td>
+<td style="text-align:left;">
+_________
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+lgaspcar
+</td>
+<td style="text-align:left;">
+overall
+</td>
+<td style="text-align:left;">
+4.296
+</td>
+<td style="text-align:left;">
+0.549
+</td>
+<td style="text-align:left;">
+3.38
+</td>
+<td style="text-align:left;">
+6.157
+</td>
+<td style="text-align:left;">
+N = 342
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+between
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+0.515
+</td>
+<td style="text-align:left;">
+3.73
+</td>
+<td style="text-align:left;">
+5.766
+</td>
+<td style="text-align:left;">
+n = 18
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+within
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+0.224
+</td>
+<td style="text-align:left;">
+3.545
+</td>
+<td style="text-align:left;">
+5.592
+</td>
+<td style="text-align:left;">
+T = 19
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="returning-a-data.frame-object" class="section level4">
+<h4>Returning a data.frame object</h4>
+<p>Returning a data.frame might be useful if one wishes to perform
+additional manipulation with the data or if you intend to use other
+rporting packages such as stargazer <span class="citation">(Hlavac
+2018)</span> or kabel<span class="citation">(Zhu 2021)</span>.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">xtsum</span>(Gas, <span class="at">variables =</span> <span class="fu">c</span>(<span class="st">&quot;lincomep&quot;</span>, <span class="st">&quot;lgaspcar&quot;</span>), <span class="at">return.data.frame =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="co">#&gt; # A tibble: 8 × 7</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co">#&gt;   Variable    Dim       Mean   SD    Min    Max    Observations</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;       &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;       </span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co">#&gt; 1 ___________ _________ &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;        </span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="co">#&gt; 2 lincomep    overall   -6.139 0.635 -8.073 -5.221 N = 342     </span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co">#&gt; 3 &lt;NA&gt;        between   &lt;NA&gt;   0.609 -7.816 -5.449 n = 18      </span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="co">#&gt; 4 &lt;NA&gt;        within    &lt;NA&gt;   0.225 -6.877 -5.6   T = 19      </span></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="co">#&gt; 5 ___________ _________ &lt;NA&gt;   &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;        </span></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="co">#&gt; 6 lgaspcar    overall   4.296  0.549 3.38   6.157  N = 342     </span></span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a><span class="co">#&gt; 7 &lt;NA&gt;        between   &lt;NA&gt;   0.515 3.73   5.766  n = 18      </span></span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a><span class="co">#&gt; 8 &lt;NA&gt;        within    &lt;NA&gt;   0.224 3.545  5.592  T = 19</span></span></code></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div id="other-functions" class="section level1">
+<h1>Other Functions</h1>
+<p>The functions below can serve as a helper when the user is not
+interested in a full report but rather check a specific value.</p>
+<div id="between_max" class="section level2">
+<h2>between_max</h2>
+<p>This function computes the maximum between-group in a panel data.</p>
+<p><em>Usage</em></p>
+<p><code>between_max(data, variable, id = NULL, t = NULL, na.rm = FALSE)</code></p>
+<p><em>Arguments</em> * <code>data</code>: A data.frame or pdata.frame
+object containing the panel data.</p>
+<ul>
+<li><p><code>variable</code>: The variable for which the maximum
+between-group effect is calculated.</p></li>
+<li><p><code>id</code> (Optional) Name of the individual identifier
+variable.</p></li>
+<li><p><code>t</code> (Optional) Name of the time identifier
+variable.</p></li>
+<li><p><code>na.rm</code> Logical. Should missing values be removed?
+Default is FALSE.</p></li>
+</ul>
+<div id="example-1" class="section level3">
+<h3>Example</h3>
+<div id="using-pdata.frame" class="section level4">
+<h4>Using pdata.frame</h4>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;Gasoline&quot;</span>, <span class="at">package =</span> <span class="st">&quot;plm&quot;</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>Gas <span class="ot">&lt;-</span> <span class="fu">pdata.frame</span>(Gasoline, <span class="at">index =</span> <span class="fu">c</span>(<span class="st">&quot;country&quot;</span>, <span class="st">&quot;year&quot;</span>), <span class="at">drop.index =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="fu">between_max</span>(Gas, <span class="at">variable =</span> <span class="st">&quot;lgaspcar&quot;</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="co">#&gt; [1] 5.766355</span></span></code></pre></div>
+</div>
+<div id="using-regular-data.frame-with-id-and-t-specified-1" class="section level4">
+<h4>Using regular data.frame with id and t specified</h4>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;Crime&quot;</span>, <span class="at">package =</span> <span class="st">&quot;plm&quot;</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="fu">between_max</span>(Crime, <span class="at">variable =</span> <span class="st">&quot;crmrte&quot;</span>, <span class="at">id =</span> <span class="st">&quot;county&quot;</span>, <span class="at">t =</span> <span class="st">&quot;year&quot;</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="co">#&gt; [1] 0.08868547</span></span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="between_min" class="section level2">
+<h2>between_min</h2>
+<p>This function computes the minimum between-group of a panel data.</p>
+<p><em>Usage</em>
+<code>between_min(data, variable, id = NULL, t = NULL, na.rm = FALSE)</code></p>
+<p><em>Arguments</em></p>
+<ul>
+<li><p><code>data</code> A data.frame or pdata.frame object containing
+the panel data.</p></li>
+<li><p><code>variable</code> The variable for which the minimum
+between-group effect is calculated.</p></li>
+<li><p><code>id</code> (Optional) Name of the individual identifier
+variable.</p></li>
+<li><p><code>t</code> (Optional) Name of the time identifier
+variable.</p></li>
+<li><p><code>na.rm</code> Logical. Should missing values be removed?
+Default is FALSE.</p></li>
+</ul>
+<p><em>Value</em> The minimum between-group effect.</p>
+<div id="example-2" class="section level4">
+<h4>Example</h4>
+</div>
+<div id="using-pdata.frame-1" class="section level4">
+<h4>Using pdata.frame</h4>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;Gasoline&quot;</span>, <span class="at">package =</span> <span class="st">&quot;plm&quot;</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>Gas <span class="ot">&lt;-</span> <span class="fu">pdata.frame</span>(Gasoline, <span class="at">index =</span> <span class="fu">c</span>(<span class="st">&quot;country&quot;</span>, <span class="st">&quot;year&quot;</span>), <span class="at">drop.index =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="fu">between_min</span>(Gas, <span class="at">variable =</span> <span class="st">&quot;lgaspcar&quot;</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="co">#&gt; [1] 3.729646</span></span></code></pre></div>
+</div>
+<div id="using-regular-data.frame-with-id-and-t-specified-2" class="section level4">
+<h4>Using regular data.frame with id and t specified</h4>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;Crime&quot;</span>, <span class="at">package =</span> <span class="st">&quot;plm&quot;</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="fu">between_min</span>(Crime, <span class="at">variable =</span> <span class="st">&quot;crmrte&quot;</span>, <span class="at">id =</span> <span class="st">&quot;county&quot;</span>, <span class="at">t =</span> <span class="st">&quot;year&quot;</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="co">#&gt; [1] 0.003969886</span></span></code></pre></div>
+</div>
+</div>
+<div id="between_sd" class="section level2">
+<h2>between_sd</h2>
+<p>This function calculates the standard deviation of between-group in a
+panel data.</p>
+<p><em>Usage</em></p>
+<p><code>between_sd(data, variable, id = NULL, t = NULL, na.rm = FALSE)</code></p>
+<p><em>Arguments</em></p>
+<ul>
+<li><p><code>data</code> A data.frame or pdata.frame object containing
+the panel data.</p></li>
+<li><p><code>variable</code> The variable for which the standard
+deviation of between-group effects is calculated.</p></li>
+<li><p><code>id</code> (Optional) Name of the individual identifier
+variable.</p></li>
+<li><p><code>t</code> (Optional) Name of the time identifier
+variable.</p></li>
+<li><p><code>na.rm</code> Logical. Should missing values be removed?
+Default is FALSE.</p></li>
+</ul>
+<p><em>Value</em> The standard deviation of between-group effects.</p>
+<div id="examples" class="section level3">
+<h3>Examples</h3>
+<div id="using-pdata.frame-2" class="section level4">
+<h4>using pdata.frame</h4>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;Gasoline&quot;</span>, <span class="at">package =</span> <span class="st">&quot;plm&quot;</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>Gas <span class="ot">&lt;-</span> <span class="fu">pdata.frame</span>(Gasoline, <span class="at">index =</span> <span class="fu">c</span>(<span class="st">&quot;country&quot;</span>, <span class="st">&quot;year&quot;</span>), <span class="at">drop.index =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="fu">between_sd</span>(Gas, <span class="at">variable =</span> <span class="st">&quot;lgaspcar&quot;</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="co">#&gt; [1] 0.5150439</span></span></code></pre></div>
+</div>
+<div id="using-regular-data.frame-with-id-and-t-specified-3" class="section level4">
+<h4>Using regular data.frame with id and t specified</h4>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;Crime&quot;</span>, <span class="at">package =</span> <span class="st">&quot;plm&quot;</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="fu">between_sd</span>(Crime, <span class="at">variable =</span> <span class="st">&quot;crmrte&quot;</span>, <span class="at">id =</span> <span class="st">&quot;county&quot;</span>, <span class="at">t =</span> <span class="st">&quot;year&quot;</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="co">#&gt; [1] 0.01698929</span></span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="within_max" class="section level2">
+<h2>within_max</h2>
+<p>This function computes the maximum within-group for a panel data.</p>
+<p><em>Usage</em></p>
+<p><code>within_max(data, variable, id = NULL, t = NULL, na.rm = FALSE)</code></p>
+<p><em>Arguments</em></p>
+<ul>
+<li><p><code>data</code> A data.frame or pdata.frame object containing
+the panel data.</p></li>
+<li><p><code>variable</code> The variable for which the maximum
+within-group effect is calculated.</p></li>
+<li><p><code>id</code> (Optional) Name of the individual identifier
+variable.</p></li>
+<li><p><code>t</code> (Optional) Name of the time identifier
+variable.</p></li>
+<li><p><code>na.rm</code> Logical. Should missing values be removed?
+Default is FALSE.</p></li>
+</ul>
+<p><em>Value</em> The maximum within-group effect.</p>
+<div id="example-3" class="section level3">
+<h3>Example</h3>
+<div id="using-pdata.frame-3" class="section level4">
+<h4>Using pdata.frame</h4>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;Gasoline&quot;</span>, <span class="at">package =</span> <span class="st">&quot;plm&quot;</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>Gas <span class="ot">&lt;-</span> <span class="fu">pdata.frame</span>(Gasoline, <span class="at">index =</span> <span class="fu">c</span>(<span class="st">&quot;country&quot;</span>, <span class="st">&quot;year&quot;</span>), <span class="at">drop.index =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="fu">within_max</span>(Gas, <span class="at">variable =</span> <span class="st">&quot;lgaspcar&quot;</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a><span class="co">#&gt; [1] 5.591887</span></span></code></pre></div>
+</div>
+<div id="using-regular-data.frame-with-id-and-t-specified-4" class="section level4">
+<h4>Using regular data.frame with id and t specified</h4>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;Crime&quot;</span>, <span class="at">package =</span> <span class="st">&quot;plm&quot;</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a><span class="fu">within_max</span>(Crime, <span class="at">variable =</span> <span class="st">&quot;crmrte&quot;</span>, <span class="at">id =</span> <span class="st">&quot;county&quot;</span>, <span class="at">t =</span> <span class="st">&quot;year&quot;</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a><span class="co">#&gt; [1] 0.1258057</span></span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="within_min" class="section level2">
+<h2>within_min</h2>
+<p>This function computes the minimum within-group for a panel data.</p>
+<p><em>Usage</em></p>
+<p><code>within_min(data, variable, id = NULL, t = NULL, na.rm = FALSE)</code></p>
+<p><em>Arguments</em></p>
+<ul>
+<li><p><code>data</code> A data.frame or pdata.frame object containing
+the panel data.</p></li>
+<li><p><code>variable</code> The variable for which the minimum
+within-group effect is calculated.</p></li>
+<li><p><code>id</code> (Optional) Name of the individual identifier
+variable.</p></li>
+<li><p><code>t</code> (Optional) Name of the time identifier
+variable.</p></li>
+<li><p><code>na.rm</code> Logical. Should missing values be removed?
+Default is FALSE.</p></li>
+</ul>
+<p><em>Value</em> The minimum within-group effect.</p>
+<div id="example-4" class="section level3">
+<h3>Example</h3>
+<div id="using-pdata.frame-4" class="section level4">
+<h4>Using pdata.frame</h4>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;Gasoline&quot;</span>, <span class="at">package =</span> <span class="st">&quot;plm&quot;</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a>Gas <span class="ot">&lt;-</span> <span class="fu">pdata.frame</span>(Gasoline, <span class="at">index =</span> <span class="fu">c</span>(<span class="st">&quot;country&quot;</span>, <span class="st">&quot;year&quot;</span>), <span class="at">drop.index =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a><span class="fu">within_min</span>(Gas, <span class="at">variable =</span> <span class="st">&quot;lgaspcar&quot;</span>)</span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a><span class="co">#&gt; [1] 3.545347</span></span></code></pre></div>
+</div>
+<div id="using-regular-data.frame-with-id-and-t-specified-5" class="section level4">
+<h4>Using regular data.frame with id and t specified</h4>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;Crime&quot;</span>, <span class="at">package =</span> <span class="st">&quot;plm&quot;</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a><span class="fu">within_min</span>(Crime, <span class="at">variable =</span> <span class="st">&quot;crmrte&quot;</span>, <span class="at">id =</span> <span class="st">&quot;county&quot;</span>, <span class="at">t =</span> <span class="st">&quot;year&quot;</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a><span class="co">#&gt; [1] -0.01128364</span></span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="within_sd" class="section level2">
+<h2>within_sd</h2>
+<p>This function computes the standard deviation of within-group for a
+panel data.</p>
+<p><em>Usage</em></p>
+<p><code>within_sd(data, variable, id = NULL, t = NULL, na.rm = FALSE)</code></p>
+<p><em>Arguments</em></p>
+<ul>
+<li><p><code>data</code>A data.frame or pdata.frame object containing
+the panel data.</p></li>
+<li><p><code>variable</code> The variable for which the standard
+deviation of within-group effects is calculated.</p></li>
+<li><p><code>id</code> (Optional) Name of the individual identifier
+variable.</p></li>
+<li><p><code>t</code> (Optional) Name of the time identifier
+variable.</p></li>
+<li><p><code>na.rm</code> Logical. Should missing values be removed?
+Default is FALSE.</p></li>
+</ul>
+<p><em>Value</em> The standard deviation of within-group effects.</p>
+<div id="example-5" class="section level3">
+<h3>Example</h3>
+<div id="using-pdata.frame-5" class="section level4">
+<h4>Using pdata.frame</h4>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;Gasoline&quot;</span>, <span class="at">package =</span> <span class="st">&quot;plm&quot;</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>Gas <span class="ot">&lt;-</span> <span class="fu">pdata.frame</span>(Gasoline, <span class="at">index =</span> <span class="fu">c</span>(<span class="st">&quot;country&quot;</span>, <span class="st">&quot;year&quot;</span>), <span class="at">drop.index =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a><span class="fu">within_sd</span>(Gas, <span class="at">variable =</span> <span class="st">&quot;lgaspcar&quot;</span>)</span>
+<span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a><span class="co">#&gt; [1] 0.2236768</span></span></code></pre></div>
+</div>
+<div id="using-regular-data.frame-with-id-and-t-specified-6" class="section level4">
+<h4>Using regular data.frame with id and t specified</h4>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;Crime&quot;</span>, <span class="at">package =</span> <span class="st">&quot;plm&quot;</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a><span class="fu">within_sd</span>(Crime, <span class="at">variable =</span> <span class="st">&quot;crmrte&quot;</span>, <span class="at">id =</span> <span class="st">&quot;county&quot;</span>, <span class="at">t =</span> <span class="st">&quot;year&quot;</span>)</span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a><span class="co">#&gt; [1] 0.006517892</span></span></code></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1 class="unnumbered">References</h1>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-hlavac_2018_stargazer" class="csl-entry">
+Hlavac, Marek. 2018. <span>“Stargazer.”</span> CRAN.R-project.org.<a href="  https://CRAN.R-project.org/package=stargazer">
+https://CRAN.R-project.org/package=stargazer</a>.
+</div>
+<div id="ref-stephenporter" class="csl-entry">
+Porter, Stephen. n.d. <em>Understanding Xtsum Output</em>.
+stephenporter.org. Accessed December 6, 2023. <a href="https://stephenporter.org/files/xtsum_handout.pdf">https://stephenporter.org/files/xtsum_handout.pdf</a>.
+</div>
+<div id="ref-stata" class="csl-entry">
+StataCorp. 2023. <span>“STATA LONGITUDINALDATA/PANELDATA REFERENCEMANUAL
+RELEASE 18.”</span> <em>A Stata Press Publication</em>.
+</div>
+<div id="ref-zhu_2021_create" class="csl-entry">
+Zhu, Hao. 2021. <span>“kableExtra.”</span> CRAN.R-project.org.<a href="  https://CRAN.R-project.org/package=kableExtra">
+https://CRAN.R-project.org/package=kableExtra</a>.
+</div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
